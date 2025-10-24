@@ -1,28 +1,59 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import ProfileQuestionnaire from './components/ProfileQuestionnaire';
+import LocalFeed from './components/LocalFeed';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [verified, setVerified] = useState(false);
+  const [profile, setProfile] = useState({
+    name: '',
+    highestEducation: '',
+    yearsExperience: '',
+    presentEmploymentState: 'unemployed',
+    company: '',
+    position: '',
+    industry: '',
+    openForWork: false,
+  });
+
+  const handleVerify = () => {
+    // Simulate successful DigiLocker verification
+    setVerified(true);
+  };
+
+  const handleProfileChange = (updates) => {
+    setProfile((prev) => ({ ...prev, ...updates }));
+  };
+
+  const handleSubmitProfile = () => {
+    // In a real app, submit to backend here
+    // For now, just log
+    console.log('Profile saved', profile);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+      <Header verified={verified} onVerify={handleVerify} />
+      <main>
+        <Hero verified={verified} onVerify={handleVerify} />
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <ProfileQuestionnaire
+              profile={profile}
+              onChange={handleProfileChange}
+              onSubmit={handleSubmitProfile}
+            />
+            <LocalFeed profile={profile} verified={verified} />
+          </div>
+        </section>
+      </main>
+      <footer className="border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-white/60 flex items-center justify-between">
+          <p>© {new Date().getFullYear()} NearWork — Connect local workforce with local opportunities.</p>
+          <p>Built with Vite + React + Tailwind</p>
         </div>
-      </div>
+      </footer>
     </div>
-  )
+  );
 }
-
-export default App
